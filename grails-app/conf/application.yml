@@ -1,12 +1,12 @@
 ---
 grails:
+    cors:
+        enabled: true
     profile: web
     codegen:
         defaultPackage: escola.api
     gorm:
         reactor:
-            # Whether to translate GORM events into Reactor events
-            # Disabled by default for performance reasons
             events: false
 info:
     app:
