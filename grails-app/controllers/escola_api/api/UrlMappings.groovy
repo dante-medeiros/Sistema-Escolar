@@ -9,11 +9,16 @@ class UrlMappings {
         "/aluno/$id"(controller: "aluno", action: "delete", method: "DELETE")
         "/aluno/$id"(controller: "aluno", action: "update", method: "PUT")
 
+        
+
         "/curso"(controller: "curso", action: "index", method: "GET")
         "/curso/$id"(controller: "curso", action: "show", method: "GET")
         "/curso"(controller: "curso", action: "save", method: "POST")
         "/curso/$id"(controller: "curso", action: "delete", method: "DELETE")
         "/curso/$id"(controller: "curso", action: "update", method: "PUT")
+
+
+
 
         "/matricula"(controller: "matricula", action: "index", method: "GET")
         "/matricula/$id"(controller: "matricula", action: "show", method: "GET")

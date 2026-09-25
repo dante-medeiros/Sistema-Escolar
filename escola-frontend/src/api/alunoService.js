@@ -2,7 +2,8 @@ import { api } from './axiosConfig';
 
 export const alunoService = {
   listar: async (busca = '') => {
-    const response = await api.get(`/aluno?nome=${encodeURIComponent(busca)}`);
+    const url = busca ? `/aluno?nome=${encodeURIComponent(busca)}` : '/aluno';
+    const response = await api.get(url);
     return response.data;
   },
   

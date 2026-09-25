@@ -27,7 +27,6 @@ export default function MatriculasPage() {
   const handleSalvar = async (e) => {
     e.preventDefault();
     try {
-      // Formato simples e direto
       const payload = {
         alunoId: Number(matriculaAtual.alunoId),
         cursoId: Number(matriculaAtual.cursoId),
@@ -45,7 +44,6 @@ export default function MatriculasPage() {
       setMatriculaAtual({ alunoId: '', cursoId: '', dataMatricula: '', valorPago: '' });
       carregarLista();
     } catch (erro) {
-      // Agora o React vai te mostrar a mensagem real do Grails!
       if (erro.response && erro.response.data) {
         alert('Erro detalhado do Grails: ' + erro.response.data);
       } else {

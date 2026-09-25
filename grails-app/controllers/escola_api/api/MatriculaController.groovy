@@ -4,9 +4,9 @@ import escola_api.Matricula
 import escola_api.Aluno
 import escola_api.Curso
 import java.text.SimpleDateFormat
-import grails.gorm.transactions.Transactional // 1. ADICIONE ESTA LINHA AQUI
+import grails.gorm.transactions.Transactional
 
-@Transactional // 2. ADICIONE ESTA LINHA AQUI TAMBÉM
+@Transactional 
 class MatriculaController {
     static responseFormats = ['json']
 

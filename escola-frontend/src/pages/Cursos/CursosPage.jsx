@@ -80,7 +80,7 @@ export default function CursosPage() {
           <h3>{cursoAtual.id ? 'Editar Curso' : 'Cadastrar Novo Curso'}</h3>
           
           <div style={{ marginBottom: '15px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Título do Curso:</label>
+            <label style={{ display: 'block', marginBottom: '5px' }}>Nome Do Curso:</label>
             <input 
               type="text" 
               required

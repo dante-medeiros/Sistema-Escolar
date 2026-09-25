@@ -56,7 +56,6 @@ export default function AlunosPage() {
       await alunoService.excluir(id);
       carregarLista();
     } catch (erro) {
-      // Se o back-end enviar a mensagem de que o aluno tem matrícula vinculada, mostra ela aqui
       if (erro.response && erro.response.data) {
         alert(erro.response.data);
       } else {
