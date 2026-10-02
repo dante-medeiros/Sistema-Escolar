@@ -4,15 +4,19 @@ import escola_api.Curso
 import grails.gorm.transactions.Transactional
 
 class CursoController {
-    static responseFormats = ['json']
+    static responseFormats = ['json', 'xml']
     def cursoService
 
     def index() {
-        def termo = params.titulo ?: params.nome ?: params.q ?: params.termo
-        if (termo && termo.trim() != '') {
-            respond Curso.findAllByTituloIlike("%${termo}%")
+        if (request.xhr || params.format) {
+            def termo = params.titulo ?: params.nome ?: params.q ?: params.termo
+            if (termo && termo.trim() != '') {
+                respond Curso.findAllByTituloIlike("%${termo}%")
+            } else {
+                respond cursoService.listar()
+            }
         } else {
-            respond cursoService.listar()
+            render(view: "index")
         }
     }
 

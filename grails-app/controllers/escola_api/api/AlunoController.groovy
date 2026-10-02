@@ -4,15 +4,18 @@ import escola_api.Aluno
 import grails.gorm.transactions.Transactional
 
 class AlunoController {
-    static responseFormats = ['json', 'xml']
     def alunoService
 
     def index() {
-        def termo = params.nome ?: params.q ?: params.termo
-        if (termo && termo.trim() != '') {
-            respond Aluno.findAllByNomeIlike("%${termo}%")
+        if (request.xhr || params.format == 'json' || request.getHeader('Accept')?.contains('application/json')) {
+            def termo = params.nome ?: params.q ?: params.termo
+            if (termo && termo.trim() != '') {
+                render Aluno.findAllByNomeIlike("%${termo}%") as grails.converters.JSON
+            } else {
+                render alunoService.listar() as grails.converters.JSON
+            }
         } else {
-            respond alunoService.listar()
+            render(view: "index")
         }
     }
 
@@ -22,7 +25,7 @@ class AlunoController {
             render status: 404
             return
         }
-        respond aluno
+        render aluno as grails.converters.JSON
     }
 
     def save() {
@@ -33,12 +36,12 @@ class AlunoController {
         )
 
         if (!aluno.validate()) {
-            respond aluno.errors, status: 400
+            render aluno.errors as grails.converters.JSON, status: 400
             return
         }
 
         alunoService.salvarAluno(aluno)
-        respond aluno, status: 201
+        render aluno as grails.converters.JSON, status: 201
     }
 
     def update(Long id) {
@@ -50,12 +53,12 @@ class AlunoController {
         aluno.properties = request.JSON
 
         if (!aluno.validate()) {
-            respond aluno.errors, status: 400
+            render aluno.errors as grails.converters.JSON, status: 400
             return
         }
 
         alunoService.salvarAluno(aluno)
-        respond aluno, status: 200
+        render aluno as grails.converters.JSON, status: 200
     }
 
     @Transactional

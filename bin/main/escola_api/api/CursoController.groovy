@@ -1,12 +1,19 @@
 package escola_api.api
 
 import escola_api.Curso
+import grails.gorm.transactions.Transactional
+
 class CursoController {
     static responseFormats = ['json']
     def cursoService
 
     def index() {
-        respond cursoService.listar()
+        def termo = params.titulo ?: params.nome ?: params.q ?: params.termo
+        if (termo && termo.trim() != '') {
+            respond Curso.findAllByTituloIlike("%${termo}%")
+        } else {
+            respond cursoService.listar()
+        }
     }
 
     def show(Long id) {
@@ -25,14 +32,36 @@ class CursoController {
         } else {
             respond curso.errors, status: 400
         }
-
     }
 
-    def delete(Long id) {
-        if (cursoService.deletarCurso(id)) {
-            render status: 204
-        } else {
+    def update(Long id) {
+        def curso = cursoService.buscarPorId(id)
+        if (!curso) {
             render status: 404
+            return
+        }
+        
+        curso.properties = request.JSON
+        
+        if (cursoService.salvarCurso(curso)) {
+            respond curso, status: 200
+        } else {
+            respond curso.errors, status: 400
+        }
+    }
+
+    @Transactional
+    def delete(Long id) {
+        try {
+            if (cursoService.deletarCurso(id)) {
+                render status: 204
+            } else {
+                render status: 404
+            }
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            render status: 400, text: "Não é possível excluir o curso porque existem matrículas associadas a ele!"
+        } catch (Exception e) {
+            render status: 400, text: "Erro ao tentar excluir o curso: " + e.message
         }
     }
 }

@@ -8,10 +8,14 @@ import grails.gorm.transactions.Transactional
 
 @Transactional 
 class MatriculaController {
-    static responseFormats = ['json']
+    static responseFormats = ['json', 'xml']
 
     def index() {
-        respond Matricula.list()
+        if (request.xhr || params.format) {
+            respond Matricula.list()
+        } else {
+            render(view: "index")
+        }
     }
 
     def show(Long id) {
@@ -23,8 +27,11 @@ class MatriculaController {
             def json = request.JSON
             def matricula = new Matricula()
             
-            if (json.alunoId) matricula.aluno = Aluno.get(json.alunoId as Long)
-            if (json.cursoId) matricula.curso = Curso.get(json.cursoId as Long)
+            def alunoId = json.alunoId ?: json.aluno?.id
+            def cursoId = json.cursoId ?: json.curso?.id
+
+            if (alunoId) matricula.aluno = Aluno.get(alunoId as Long)
+            if (cursoId) matricula.curso = Curso.get(cursoId as Long)
             if (json.valorPago != null) matricula.valorPago = json.valorPago as BigDecimal
             
             if (json.dataMatricula) {
@@ -53,8 +60,11 @@ class MatriculaController {
             }
 
             def json = request.JSON
-            if (json.alunoId) matricula.aluno = Aluno.get(json.alunoId as Long)
-            if (json.cursoId) matricula.curso = Curso.get(json.cursoId as Long)
+            def alunoId = json.alunoId ?: json.aluno?.id
+            def cursoId = json.cursoId ?: json.curso?.id
+
+            if (alunoId) matricula.aluno = Aluno.get(alunoId as Long)
+            if (cursoId) matricula.curso = Curso.get(cursoId as Long)
             if (json.valorPago != null) matricula.valorPago = json.valorPago as BigDecimal
             
             if (json.dataMatricula) {
